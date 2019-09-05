@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="4"
+        android:orientation="vertical"
+
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="20dp"
+
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:text="Welcome "/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@color/colorAccent"
+            android:padding="4dp"
+            android:visibility="gone"
+            android:weightSum="1">
+
+
+            <Spinner
+                android:id="@+id/spinnerloginas"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+
+                android:layout_alignParentRight="true"
+
+                android:layout_marginBottom="32dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/border_rounded_corner_transparent"
+            android:layout_weight="1">
+
+            <AutoCompleteTextView
+                android:id="@+id/colgnameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:focusable="false"
+                android:drawableRight="@drawable/drop"
+                android:padding="@dimen/_5sdp"
+                android:textColorHint="@color/Grey"
+                android:hint="Enter Your College Name "/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_50sdp"
+
+            android:background="@drawable/border_rounded_corner_transparent"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/usernameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
+                android:background="@null"
+                android:textColorHint="@color/Grey"
+                android:hint="Enter user id  "/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+
+            android:background="@drawable/border_rounded_corner_transparent"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/userPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
+                android:background="@null"
+                android:textColorHint="@color/Grey"
+                android:hint="Enter Password"/>
+
+        </LinearLayout>
+
+
+
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_weight="1">-->
+        <!--<EditText-->
+        <!--android:id="@+id/passwordEditText"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColorHint="@color/colorAccent"-->
+
+        <!--android:hint="Password"/>-->
+
+        <!--</LinearLayout>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/White"
+                android:text="SUBMIT"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="or"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:layout_gravity="center_horizontal"/>
+
+
+
+
+
+
+        <TextView
+            android:id="@+id/RegiButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="18dp"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/Red"
+            android:layout_gravity="center_horizontal"
+            android:text="Register Here  "/>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
