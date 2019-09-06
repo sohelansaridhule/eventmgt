@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -32,11 +33,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public  static final String COL_USER_NAME="user_name";
-    public  static final String COL_USER_EMAIL="user_email";
     public  static final String COL_USER_MOBILE="user_mobile";
     public  static final String COL_USER_PASS="user_pass";
     public  static final String COL_USER_COLG="user_colg";
     public  static final String COL_USER_ID="user_id";
+    public  static final String COL_USER_TYPE="user_type";
 
 
 
@@ -54,7 +55,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        CREATE_TABLE_USER="create table tbl_user(user_id text,user_name text,user_mobile text,user_colg,user_pass)";
+        CREATE_TABLE_USER="create table tbl_user(user_id text,user_name text,user_mobile text,user_colg text,user_pass text, user_type text)";
         db.execSQL(CREATE_TABLE_USER);
 
         CREATE_TABLE_EVENT="create table tbl_event(event_id integer primary key autoincrement,event_name text,date text,caption text,image_path text)";
@@ -73,26 +74,32 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    void insertUser(String name,String mobile,String colg,String uname,String pass)
+    public long insertUser(String name,String mobile,String colg,String uname,String pass, String userType)
     {
+        long returnVal = 0;
 
         try {
             dataBase = getWritableDatabase();
+            dataBase.beginTransaction();
+
+           ContentValues cValues = new ContentValues();
+
+            cValues.put(COL_USER_NAME, name);
+            cValues.put(COL_USER_MOBILE, mobile);
+            cValues.put(COL_USER_COLG, colg);
+            cValues.put(COL_USER_ID, uname);
+            cValues.put(COL_USER_PASS, pass);
+            cValues.put(COL_USER_TYPE, userType);
+
+          returnVal =   dataBase.insert(TABLE_USER, null, cValues);
+            dataBase.setTransactionSuccessful();
+            dataBase.endTransaction();
         } catch (SQLException s) {
+            dataBase.endTransaction();
             new Exception("Error with DB Open");
         }
-        cValues=new ContentValues();
 
-        cValues.put(COL_USER_NAME,name);
-        cValues.put(COL_USER_MOBILE,mobile);
-        cValues.put(COL_USER_COLG,colg);
-        cValues.put(COL_USER_ID,uname);
-        cValues.put(COL_USER_PASS,pass);
-
-        dataBase.insert(TABLE_USER, null, cValues);
-
-        dataBase.close();
-
+        return returnVal;
 
     }
 
@@ -146,5 +153,40 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         return eventArrayList;
+    }
+
+    public String[] getAllColleges(){
+        String[] cNames;
+        String selectQuery = "SELECT  * FROM " + TABLE_USER;
+        SQLiteDatabase db  = getReadableDatabase();
+        Cursor cursor      = db.rawQuery(selectQuery, null);
+        cNames = new String[cursor.getCount()];
+        int i = 0;
+        if (cursor.moveToFirst()){
+            do{
+                cNames[i] = cursor.getString(3);
+                i++;
+            }while (cursor.moveToNext());
+        }
+
+        return cNames;
+
+    }
+
+    public boolean login(String clgName, String userId, String password){
+        String where = COL_USER_COLG+" = '"+clgName+"' AND "+COL_USER_ID+" = '"+userId+"' AND "+COL_USER_PASS+" = '"+password+"'";
+        Log.d("DBHELPER", "WHERE - "+where);
+
+        String selectQuery = "SELECT  * FROM " + TABLE_USER+" WHERE "+where;
+        Log.d("DBHELPER", "QUERY - "+where);
+        SQLiteDatabase db  = getReadableDatabase();
+        Cursor cursor      = db.rawQuery(selectQuery, null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            return true;
+        }
+        else
+            return false;
+
     }
 }

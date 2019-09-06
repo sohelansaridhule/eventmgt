@@ -1,6 +1,7 @@
 package test.admin.eventmanagement;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +41,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.CustomViewHo
 
         customViewHolder.tv_title.setText(eventList.get(i).getEventName());
         customViewHolder.tv_date.setText(eventList.get(i).getEventDate());
+        customViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext, EventDetails.class));
+            }
+        });
 
     }
 

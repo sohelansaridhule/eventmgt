@@ -1,9 +1,16 @@
 package test.admin.eventmanagement;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,9 +50,16 @@ public class AddEvent extends AppCompatActivity {
         dbHelper = new DBHelper(getApplicationContext());
 
         imagePost.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-                pickGellery();
+                if (ActivityCompat.checkSelfPermission(AddEvent.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                    pickGellery();
+                }
+                else {
+
+                    ActivityCompat.requestPermissions(AddEvent.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},221);
+                }
             }
         });
 
@@ -80,6 +94,14 @@ public class AddEvent extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 221){
+            imagePost.performClick();
+        }
     }
 
     public void pickGellery(){

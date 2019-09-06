@@ -35,24 +35,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-        Event event=new Event();
-        event.setEventName("The Perfect college fest");
-        event.setEventDate("29th augast 8pm");
-        event.setEventImg("");
-        event.setEventCaption("xyz");
-        event.setEventDetail("xyz");
-        eventsList.add(event);
+//        Event event=new Event();
+//        event.setEventName("The Perfect college fest");
+//        event.setEventDate("29th augast 8pm");
+//        event.setEventImg("");
+//        event.setEventCaption("xyz");
+//        event.setEventDetail("xyz");
+//        eventsList.add(event);
+//
+//
+//        event.setEventName("College campus 2019");
+//        event.setEventDate("30th augast 11am");
+//        event.setEventImg("");
+//        event.setEventCaption("xyz");
+//        event.setEventDetail("xyz");
+//        eventsList.add(event);
 
 
-        event.setEventName("College campus 2019");
-        event.setEventDate("30th augast 11am");
-        event.setEventImg("");
-        event.setEventCaption("xyz");
-        event.setEventDetail("xyz");
-        eventsList.add(event);
-
-
-        eventAdapter.notifyDataSetChanged();
+//        eventAdapter.notifyDataSetChanged();
 
         eventsList.addAll(getEventFromDB());
         eventAdapter.notifyDataSetChanged();

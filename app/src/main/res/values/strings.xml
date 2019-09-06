@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EventManagement</string>
+    <string name="title_activity_event_details">EventDetails</string>
 </resources>
