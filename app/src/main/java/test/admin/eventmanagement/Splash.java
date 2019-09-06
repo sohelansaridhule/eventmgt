@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Splash extends AppCompatActivity {
+import test.admin.eventmanagement.util.SessionManager;
 
+public class Splash extends AppCompatActivity {
+SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        sessionManager = new SessionManager(getApplicationContext());
 
 
         Thread timerThread = new Thread() {
@@ -20,8 +23,15 @@ public class Splash extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     {
-                       startActivity(new Intent(Splash.this,LoginActivity.class));
-                       finish();
+                        if(sessionManager.isLogin()){
+                            startActivity(new Intent(Splash.this,HomeActivity.class));
+                            finish();
+
+                        }
+                        else {
+                            startActivity(new Intent(Splash.this,LoginActivity.class));
+                            finish();
+                        }
 
                     }
 

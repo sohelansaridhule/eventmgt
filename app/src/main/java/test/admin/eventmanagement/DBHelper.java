@@ -189,4 +189,13 @@ public class DBHelper extends SQLiteOpenHelper {
             return false;
 
     }
+
+    public int deleteEvent(String eName) {
+        int r = 0;
+        dataBase = getWritableDatabase();
+        r = dataBase.delete(TABLE_EVENT, "event_name=?", new String[]{String.valueOf(eName)});
+        dataBase.close();
+        return r;
+
+    }
 }

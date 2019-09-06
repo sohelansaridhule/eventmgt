@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import test.admin.eventmanagement.util.SessionManager;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     Intent i;
@@ -19,6 +21,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     AutoCompleteTextView colgnameEditText;
     EditText usernameEditText, userPass;
     DBHelper dbHelper;
+    SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     void init()
     {
+        sessionManager = new SessionManager(getApplicationContext());
         dbHelper = new DBHelper(getApplicationContext());
         SubMit=(Button)findViewById(R.id.loginButton);
         Register=(TextView)findViewById(R.id.RegiButton);
@@ -56,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         {
             case R.id.loginButton:
                 if (dbHelper.login(colgnameEditText.getText().toString(),usernameEditText.getText().toString(),userPass.getText().toString())){
+                    sessionManager.setIsLogin();
                     startActivity(new Intent(LoginActivity.this,HomeActivity.class));
                     finish();
                 }

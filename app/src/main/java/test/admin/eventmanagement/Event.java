@@ -9,6 +9,7 @@ public class Event {
     private String EventCaption;
 
 
+
     public String getEventName() {
         return EventName;
     }

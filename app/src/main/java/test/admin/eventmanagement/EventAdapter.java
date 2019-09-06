@@ -2,6 +2,7 @@ package test.admin.eventmanagement;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,14 +38,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.CustomViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomViewHolder customViewHolder, int i) {
+    public void onBindViewHolder(@NonNull CustomViewHolder holder, int i) {
 
-        customViewHolder.tv_title.setText(eventList.get(i).getEventName());
-        customViewHolder.tv_date.setText(eventList.get(i).getEventDate());
-        customViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        final Event event  = eventList.get(i);
+        holder.tv_title.setText(eventList.get(i).getEventName());
+        holder.tv_date.setText(eventList.get(i).getEventDate());
+        if (!event.getEventImg().equals(""))
+            holder.imgPost.setImageURI(Uri.parse(event.getEventImg()));
+        else
+            holder.imgPost.setImageDrawable(mContext.getResources().getDrawable(R.drawable.event1));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, EventDetails.class));
+                Intent intent = new Intent(mContext, EventDetails.class);
+                intent.putExtra("title",event.getEventName());
+                intent.putExtra("date",event.getEventDate());
+                intent.putExtra("caption",event.getEventCaption());
+                intent.putExtra("imagePath",event.getEventImg());
+
+                mContext.startActivity(intent);
             }
         });
 
