@@ -9,11 +9,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import test.admin.eventmanagement.activity.Participations;
 import test.admin.eventmanagement.util.SessionManager;
+
+import static android.view.View.GONE;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -21,6 +26,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     EventAdapter eventAdapter;
     RecyclerView recyclerView;
     Button AddEvent;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
     void init()
     {
+        sessionManager = new SessionManager(getApplicationContext());
         eventsList=new ArrayList<>();
         AddEvent=(Button)findViewById(R.id.btnAdd) ;
         AddEvent.setOnClickListener(this);
@@ -41,12 +48,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         eventsList.addAll(getEventFromDB());
         eventAdapter.notifyDataSetChanged();
 
+        if (sessionManager.getUserType().equalsIgnoreCase(DBHelper.STUDENT))
+            AddEvent.setVisibility(GONE);
+
     }
 
     public ArrayList<Event> getEventFromDB(){
         DBHelper dbHelper = new DBHelper(getApplicationContext());
 
-        return dbHelper.getAllEvents();
+        return dbHelper.getAllEvents(sessionManager.getUserColg());
 
     }
 
@@ -73,6 +83,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        if (sessionManager.getUserType().equalsIgnoreCase(DBHelper.STUDENT)){
+            menu.removeItem(R.id.menu_create_event);
+        }
         return true;
     }
 
@@ -82,9 +95,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_logout:
                 new SessionManager(getApplicationContext()).clearSession();
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                finish();
                 break;
             case R.id.menu_create_event:
                 startActivity(new Intent(HomeActivity.this,AddEvent.class));
+                break;
+            case R.id.menu_partc:
+                startActivity(new Intent(HomeActivity.this, Participations.class));
+
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -4,8 +4,8 @@
     <item android:title="Create Event"
         android:id="@+id/menu_create_event"/>
 
-<!--    <item android:title="Users"-->
-<!--        android:id="@+id/menu_users"/>-->
+    <item android:title="View Event Participations"
+        android:id="@+id/menu_partc"/>
 
     <item android:title="Logout"
         android:id="@+id/menu_logout"/>

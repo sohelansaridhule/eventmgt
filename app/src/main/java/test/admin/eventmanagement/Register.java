@@ -64,11 +64,12 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                     TextPass.setError("Enter this filed");
                 else {
                     if (spUserType.getSelectedItem().toString().equalsIgnoreCase(DBHelper.HEAD)){
-                        if (!dbHelper.checkColgHead(textColg.getText().toString())){
+                        if (!dbHelper.isHeadAvailable(textColg.getText().toString())){
                             long no =  dbHelper.insertUser(textName.getText().toString().trim(),textPhone.getText().toString().trim(),textColg.getText().toString().trim(),
                                     textUserName.getText().toString().trim(),TextPass.getText().toString().trim(), spUserType.getSelectedItem().toString().trim());
                             Toast.makeText(this, "User added", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(Register.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            finish();
 
                         }
                         else {
@@ -80,6 +81,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                                 textUserName.getText().toString().trim(),TextPass.getText().toString().trim(), spUserType.getSelectedItem().toString().trim());
                         Toast.makeText(this, "User added", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(Register.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        finish();
 
                     }
 

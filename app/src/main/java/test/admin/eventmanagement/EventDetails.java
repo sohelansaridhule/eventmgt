@@ -89,6 +89,9 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
         btnUpdate = findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(this);
 
+        if (sessionManager.getUserType().equalsIgnoreCase(DBHelper.STUDENT))
+            btnUpdate.setText("Participate");
+
         image.setImageURI(Uri.parse(imagePath));
         edtTitle.setText(title);
         edtDate.setText(date);
@@ -186,21 +189,19 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
             break;
 
             case R.id.btnUpdate:
-                if (edtTitle.getText().toString().isEmpty()){
-                    Toast.makeText(this, "Title is mandatory", Toast.LENGTH_SHORT).show();
+                if (sessionManager.getUserType().equalsIgnoreCase(DBHelper.STUDENT)){
+                    DBHelper dbHelper = new DBHelper(getApplicationContext());
+                    if (!sessionManager.getUserName().equals("") && eventId != 0){
+                        if (dbHelper.insertParticipte(sessionManager.getUserName(),String.valueOf(eventId), title, sessionManager.getUserColg()) > 0){
+                            Toast.makeText(EventDetails.this, "Participated", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else {
+                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else if (edtCaption.getText().toString().isEmpty()){
-                    Toast.makeText(this, "Caption is mandatory", Toast.LENGTH_SHORT).show();
-                }
-                else if (edtDate.getText().toString().isEmpty()){
-                    Toast.makeText(this, "Date is mandatory", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    DBHelper dbHelper1 = new DBHelper(getApplicationContext());
-
-                    dbHelper1.updateEvent(eventId, title, caption, date, imagePath);
-                    Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+                else {
+                    updateEvent();
                 }
 
                 break;
@@ -212,6 +213,25 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
                     requestForCameraAndStorage();
                 break;
         }
+    }
+
+    public void updateEvent(){
+        if (edtTitle.getText().toString().isEmpty()){
+            Toast.makeText(this, "Title is mandatory", Toast.LENGTH_SHORT).show();
+        }
+        else if (edtCaption.getText().toString().isEmpty()){
+            Toast.makeText(this, "Caption is mandatory", Toast.LENGTH_SHORT).show();
+        }
+        else if (edtDate.getText().toString().isEmpty()){
+            Toast.makeText(this, "Date is mandatory", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            DBHelper dbHelper1 = new DBHelper(getApplicationContext());
+            dbHelper1.updateEvent(eventId, title, caption, date, imagePath);
+            Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
+
     }
 
     public boolean hasCameraAndStoragePermission() {

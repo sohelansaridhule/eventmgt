@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import test.admin.eventmanagement.util.SessionManager;
 
@@ -20,17 +21,18 @@ public class DBHelper extends SQLiteOpenHelper {
     private SQLiteDatabase dataBase = null;
 
     private String CREATE_TABLE_EVENT;
-
     private String CREATE_TABLE_USER;
+    private String CREATE_TABLE_PARTICIPATES;
 
     public  static final String TABLE_EVENT="tbl_event";
-
     public  static final String TABLE_USER="tbl_user";
+    public  static final String TABLE_PARTICIPATES="tbl_participates";
 
     public  static final String COL_EVE_NAME="event_name";
     public  static final String COL_EVE_IMG="image_path";
     public  static final String COL_EVE_DATE="date";
     public  static final String COL_EVE_CAPT="caption";
+    public  static final String COL_EVE_COLG="colg_name";
     public  static final String COL_EVE_DETAILS="ev_det";
 
 
@@ -40,6 +42,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public  static final String COL_USER_COLG="user_colg";
     public  static final String COL_USER_ID="user_id";
     public  static final String COL_USER_TYPE="user_type";
+
+    public static final String COL_PART_ID = "part_id";
+    public static final String COL_PART_USER_NAME = "part_user_name";
+    public static final String COL_PART_EVENT_ID = "part_event_id";
+    public static final String COL_PART_EVENT_NAME = "part_event_name";
+    public static final String COL_PART_COLG_NAME = "part_colg_name";
 
     public  static final String STUDENT="Student";
     public  static final String HEAD="Head";
@@ -64,9 +72,11 @@ public class DBHelper extends SQLiteOpenHelper {
         CREATE_TABLE_USER="create table tbl_user(user_id text,user_name text,user_mobile text,user_colg text,user_pass text, user_type text)";
         db.execSQL(CREATE_TABLE_USER);
 
-        CREATE_TABLE_EVENT="create table tbl_event(event_id integer primary key autoincrement,event_name text,date text,caption text,image_path text)";
+        CREATE_TABLE_EVENT="create table tbl_event(event_id integer primary key autoincrement,event_name text,date text,caption text,image_path text, colg_name text)";
         db.execSQL(CREATE_TABLE_EVENT);
 
+        CREATE_TABLE_PARTICIPATES="create table tbl_participates(part_id integer primary key autoincrement,part_user_name text,part_event_id text ,part_event_name text ,part_colg_name text)";
+        db.execSQL(CREATE_TABLE_PARTICIPATES);
 
     }
 
@@ -78,10 +88,13 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE if EXISTS tbl_event");
         onCreate(db);
 
+        db.execSQL("DROP TABLE if EXISTS tbl_participates");
+        onCreate(db);
+
     }
 
-    public boolean checkColgHead(String cName){
-        String where = COL_USER_COLG+" = '"+cName+"' AND "+COL_USER_COLG+"= '"+HEAD+"'";
+    public boolean isHeadAvailable(String cName){
+        String where = COL_USER_COLG+" = '"+cName+"' AND "+COL_USER_TYPE+"= '"+HEAD+"'";
         String query = "SELECT * FROM "+TABLE_USER+" WHERE "+where;
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
@@ -123,7 +136,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public long insertEvent(String imagePath, String title, String date, String caption){
+    public long insertEvent(String imagePath, String title, String date, String caption, String colgName){
         long returnVal = 0;
         try {
             dataBase = getWritableDatabase();
@@ -134,6 +147,7 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put(COL_EVE_CAPT,caption);
             contentValues.put(COL_EVE_IMG,imagePath);
             contentValues.put(COL_EVE_DATE,date);
+            contentValues.put(COL_EVE_COLG,colgName);
 
             returnVal = dataBase.insert(TABLE_EVENT, null, contentValues);
 
@@ -149,11 +163,59 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<Event> getAllEvents() {
+    public long insertParticipte(String userName, String eventId, String eventName, String colgName){
+        long returnVal = 0;
+        try {
+            dataBase = getWritableDatabase();
+            dataBase.beginTransaction();
+            ContentValues contentValues=new ContentValues();
+
+            contentValues.put(COL_PART_USER_NAME,userName);
+            contentValues.put(COL_PART_EVENT_ID,eventId);
+            contentValues.put(COL_PART_EVENT_NAME,eventName);
+            contentValues.put(COL_PART_COLG_NAME,colgName);
+
+            returnVal = dataBase.insert(TABLE_PARTICIPATES, null, contentValues);
+
+            dataBase.setTransactionSuccessful();
+            dataBase.endTransaction();
+        } catch (Exception s) {
+            dataBase.endTransaction();
+            s.printStackTrace();
+            new Exception("Error with DB Open");
+        }
+
+        return returnVal;
+
+    }
+
+    public List<Participation> getAllParticipations(String cName){
+        List<Participation> list = new ArrayList<>();
+        String where = COL_PART_COLG_NAME +" = '"+cName+"'";
+
+        String selectQuery = "SELECT  * FROM " + TABLE_PARTICIPATES+" WHERE "+where;
+        SQLiteDatabase db  = getReadableDatabase();
+        Cursor cursor      = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()){
+            do {
+                Participation participation = new Participation();
+                participation.setCollegeName(cursor.getString(4));
+                participation.setEventName(cursor.getString(3));
+                participation.setUserName(cursor.getString(1));
+                list.add(participation);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    public ArrayList<Event> getAllEvents(String cName) {
 
         ArrayList<Event>  eventArrayList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_EVENT;
+        String where = COL_EVE_COLG +" = '"+cName+"'";
+        String selectQuery = "SELECT  * FROM " + TABLE_EVENT+" WHERE "+where;
         SQLiteDatabase db  = getReadableDatabase();
         Cursor cursor      = db.rawQuery(selectQuery, null);
 
@@ -195,6 +257,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+
+
     public boolean login(Context context, String clgName, String userId, String password){
         String where = COL_USER_COLG+" = '"+clgName+"' AND "+COL_USER_ID+" = '"+userId+"' AND "+COL_USER_PASS+" = '"+password+"'";
         Log.d("DBHELPER", "WHERE - "+where);
@@ -203,13 +267,17 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("DBHELPER", "QUERY - "+where);
         SQLiteDatabase db  = getReadableDatabase();
         Cursor cursor      = db.rawQuery(selectQuery, null);
-
+            SessionManager sessionManager = new SessionManager(context);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             if (cursor.getString(5).equalsIgnoreCase(HEAD))
-                new SessionManager(context).setUserType(HEAD);
+                sessionManager.setUserType(HEAD);
             else
-                new SessionManager(context).setUserType(STUDENT);
+                sessionManager.setUserType(STUDENT);
+
+            sessionManager.setUserName(cursor.getString(0));
+            sessionManager.setUserColgName(cursor.getString(3));
+
             return true;
         }
         else

@@ -15,6 +15,7 @@ public class SessionManager {
     public static final String MOBILE = "mobile";
     public static final String PASSWORD = "password";
     public static final String USER_TYPE = "user_type";
+    public static final String USER_COLG_NAME = "user_college_name";
 
     // Shared Preferences
     SharedPreferences pref;
@@ -56,6 +57,24 @@ public class SessionManager {
 
     public String getUserType(){
         return  pref.getString(USER_TYPE, DBHelper.STUDENT);
+    }
+
+    public void setUserName(String userName){
+        editor.putString(USER_NAME, userName);
+        editor.commit();
+    }
+
+    public String getUserName(){
+        return  pref.getString(USER_NAME,"");
+    }
+
+    public void setUserColgName(String name){
+        editor.putString(USER_COLG_NAME, name);
+        editor.commit();
+    }
+
+    public String getUserColg(){
+        return pref.getString(USER_COLG_NAME, "");
     }
 
     public void clearSession() {

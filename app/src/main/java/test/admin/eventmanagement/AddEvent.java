@@ -36,6 +36,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import test.admin.eventmanagement.util.SessionManager;
+
 public class AddEvent extends AppCompatActivity {
 
     private static final int IMAGE_PICK = 300;
@@ -44,6 +46,7 @@ public class AddEvent extends AppCompatActivity {
     TextView etTitle, etDate, etCaption;
     Button btnAdd;
     String imgePath = "";
+    SessionManager sessionManager;
 
     DBHelper dbHelper;
 
@@ -60,6 +63,7 @@ public class AddEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        sessionManager = new SessionManager(getApplicationContext());
         imagePost = findViewById(R.id.imagePost);
         etTitle = findViewById(R.id.etTitle);
         etDate = findViewById(R.id.etDate);
@@ -98,7 +102,7 @@ public class AddEvent extends AppCompatActivity {
                 }
                 else {
                     long r =0;
-                    r= dbHelper.insertEvent(selectedImagePath , etTitle.getText().toString(),etDate.getText().toString(), etCaption.getText().toString());
+                    r= dbHelper.insertEvent(selectedImagePath , etTitle.getText().toString(),etDate.getText().toString(), etCaption.getText().toString(), sessionManager.getUserColg());
                     if (r > 0){
                         Toast.makeText(AddEvent.this, "Event Added", Toast.LENGTH_SHORT).show();
                         onBackPressed();

@@ -69,8 +69,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
                 case R.id.RegiButton:
-                startActivity(new Intent(LoginActivity.this,Register.class));
-                finish();
+                startActivity(new Intent(LoginActivity.this,Register.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
 
         }
