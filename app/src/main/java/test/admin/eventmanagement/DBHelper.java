@@ -10,6 +10,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import test.admin.eventmanagement.util.SessionManager;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     public static String DATABASE_NAME = "event.db";
@@ -39,6 +41,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public  static final String COL_USER_ID="user_id";
     public  static final String COL_USER_TYPE="user_type";
 
+    public  static final String STUDENT="Student";
+    public  static final String HEAD="Head";
+
+
 
 
     @Override
@@ -61,6 +67,7 @@ public class DBHelper extends SQLiteOpenHelper {
         CREATE_TABLE_EVENT="create table tbl_event(event_id integer primary key autoincrement,event_name text,date text,caption text,image_path text)";
         db.execSQL(CREATE_TABLE_EVENT);
 
+
     }
 
     @Override
@@ -71,6 +78,19 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE if EXISTS tbl_event");
         onCreate(db);
 
+    }
+
+    public boolean checkColgHead(String cName){
+        String where = COL_USER_COLG+" = '"+cName+"' AND "+COL_USER_COLG+"= '"+HEAD+"'";
+        String query = "SELECT * FROM "+TABLE_USER+" WHERE "+where;
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        if (cursor.getCount() >= 1){  //colg is with head available
+                return true;
+        }
+        else {
+            return false;
+        }
     }
 
 
@@ -141,6 +161,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             do {
                 Event event = new Event();
+                event.setId(cursor.getInt(0));
                 event.setEventName(cursor.getString(1));
                 event.setEventDate(cursor.getString(2));
                 event.setEventCaption(cursor.getString(3));
@@ -157,14 +178,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public String[] getAllColleges(){
         String[] cNames;
-        String selectQuery = "SELECT  * FROM " + TABLE_USER;
+        String selectQuery = "SELECT DISTINCT * FROM " + TABLE_USER;
         SQLiteDatabase db  = getReadableDatabase();
-        Cursor cursor      = db.rawQuery(selectQuery, null);
+//        Cursor cursor      = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.query(true,TABLE_USER,new String[]{COL_USER_COLG},null,null,null,null,null,null);
         cNames = new String[cursor.getCount()];
         int i = 0;
         if (cursor.moveToFirst()){
             do{
-                cNames[i] = cursor.getString(3);
+                cNames[i] = cursor.getString(0);
                 i++;
             }while (cursor.moveToNext());
         }
@@ -173,7 +195,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean login(String clgName, String userId, String password){
+    public boolean login(Context context, String clgName, String userId, String password){
         String where = COL_USER_COLG+" = '"+clgName+"' AND "+COL_USER_ID+" = '"+userId+"' AND "+COL_USER_PASS+" = '"+password+"'";
         Log.d("DBHELPER", "WHERE - "+where);
 
@@ -183,6 +205,11 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor      = db.rawQuery(selectQuery, null);
 
         if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            if (cursor.getString(5).equalsIgnoreCase(HEAD))
+                new SessionManager(context).setUserType(HEAD);
+            else
+                new SessionManager(context).setUserType(STUDENT);
             return true;
         }
         else
@@ -196,6 +223,21 @@ public class DBHelper extends SQLiteOpenHelper {
         r = dataBase.delete(TABLE_EVENT, "event_name=?", new String[]{String.valueOf(eName)});
         dataBase.close();
         return r;
+
+    }
+
+    public void updateEvent(int id, String eName, String caption, String date, String img){
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_EVE_NAME,eName); //These Fields should be your String values of actual column names
+        cv.put(COL_EVE_DATE,date); //These Fields should be your String values of actual column names
+        cv.put(COL_EVE_CAPT,caption); //These Fields should be your String values of actual column names
+        cv.put(COL_EVE_IMG,img); //These Fields should be your String values of actual column names
+
+        db.update(TABLE_EVENT, cv, "event_id = "+id, null);
+        db.setTransactionSuccessful();
+        db.endTransaction();
 
     }
 }

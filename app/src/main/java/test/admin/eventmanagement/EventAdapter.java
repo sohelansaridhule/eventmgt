@@ -56,6 +56,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.CustomViewHo
                 intent.putExtra("date",event.getEventDate());
                 intent.putExtra("caption",event.getEventCaption());
                 intent.putExtra("imagePath",event.getEventImg());
+                intent.putExtra("eventId",event.getId());
 
                 mContext.startActivity(intent);
             }

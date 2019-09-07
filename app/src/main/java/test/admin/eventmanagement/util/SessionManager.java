@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import test.admin.eventmanagement.DBHelper;
+
 
 public class SessionManager {
     public static final String PREF_NAME = "session_user";
@@ -12,6 +14,7 @@ public class SessionManager {
     public static final String USER_NAME = "user_name";
     public static final String MOBILE = "mobile";
     public static final String PASSWORD = "password";
+    public static final String USER_TYPE = "user_type";
 
     // Shared Preferences
     SharedPreferences pref;
@@ -44,6 +47,15 @@ public class SessionManager {
 
     public boolean isLogin(){
         return pref.getBoolean(IS_LOGIN, false);
+    }
+
+    public void setUserType(String userType){
+        editor.putString(USER_TYPE, userType);
+        editor.commit();
+    }
+
+    public String getUserType(){
+        return  pref.getString(USER_TYPE, DBHelper.STUDENT);
     }
 
     public void clearSession() {

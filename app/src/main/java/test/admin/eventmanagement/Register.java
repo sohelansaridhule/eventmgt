@@ -63,10 +63,26 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 else if (TextPass.getText().toString().isEmpty())
                     TextPass.setError("Enter this filed");
                 else {
-                    long no =  dbHelper.insertUser(textName.getText().toString().trim(),textPhone.getText().toString().trim(),textColg.getText().toString().trim(),
-                            textUserName.getText().toString().trim(),TextPass.getText().toString().trim(), spUserType.getSelectedItem().toString().trim());
-                    Toast.makeText(this, "User added", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(Register.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    if (spUserType.getSelectedItem().toString().equalsIgnoreCase(DBHelper.HEAD)){
+                        if (!dbHelper.checkColgHead(textColg.getText().toString())){
+                            long no =  dbHelper.insertUser(textName.getText().toString().trim(),textPhone.getText().toString().trim(),textColg.getText().toString().trim(),
+                                    textUserName.getText().toString().trim(),TextPass.getText().toString().trim(), spUserType.getSelectedItem().toString().trim());
+                            Toast.makeText(this, "User added", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(Register.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                        }
+                        else {
+                            Toast.makeText(this, "Head is available for the college", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else {
+                        long no =  dbHelper.insertUser(textName.getText().toString().trim(),textPhone.getText().toString().trim(),textColg.getText().toString().trim(),
+                                textUserName.getText().toString().trim(),TextPass.getText().toString().trim(), spUserType.getSelectedItem().toString().trim());
+                        Toast.makeText(this, "User added", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(Register.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                    }
+
 
                 }
 

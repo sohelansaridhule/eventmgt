@@ -86,12 +86,25 @@ public class AddEvent extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                long r =0;
-                r= dbHelper.insertEvent(selectedImagePath , etTitle.getText().toString(),etDate.getText().toString(), etCaption.getText().toString());
-                if (r > 0){
-                    Toast.makeText(AddEvent.this, "Event Added", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+
+                if (etTitle.getText().toString().isEmpty()){
+                    etTitle.setError("This is mandatory");
                 }
+                else if (etCaption.getText().toString().isEmpty()){
+                    etCaption.setError("This is mandatory");
+                }
+                else if (etDate.getText().toString().isEmpty()){
+                    etDate.setError("This is mandatory");
+                }
+                else {
+                    long r =0;
+                    r= dbHelper.insertEvent(selectedImagePath , etTitle.getText().toString(),etDate.getText().toString(), etCaption.getText().toString());
+                    if (r > 0){
+                        Toast.makeText(AddEvent.this, "Event Added", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                }
+
             }
         });
 

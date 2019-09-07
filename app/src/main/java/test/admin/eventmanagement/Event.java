@@ -2,6 +2,7 @@ package test.admin.eventmanagement;
 
 public class Event {
 
+    private int id;
     private String EventName;
     private String EventDate;
     private String EventImg;
@@ -9,6 +10,13 @@ public class Event {
     private String EventCaption;
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getEventName() {
         return EventName;

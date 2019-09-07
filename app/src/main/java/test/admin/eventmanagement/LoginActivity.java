@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId())
         {
             case R.id.loginButton:
-                if (dbHelper.login(colgnameEditText.getText().toString(),usernameEditText.getText().toString(),userPass.getText().toString())){
+                if (dbHelper.login(getApplicationContext(), colgnameEditText.getText().toString(),usernameEditText.getText().toString(),userPass.getText().toString())){
                     sessionManager.setIsLogin();
                     startActivity(new Intent(LoginActivity.this,HomeActivity.class));
                     finish();

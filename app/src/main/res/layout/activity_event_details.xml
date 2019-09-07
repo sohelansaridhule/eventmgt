@@ -126,6 +126,14 @@
                     android:text=""/>
             </LinearLayout>
 
+            <Button
+                android:id="@+id/btnUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/White"
+                android:text="Update"/>
 
         </LinearLayout>
 
