@@ -22,6 +22,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        getSupportActionBar().setTitle("Register");
         init();
     }
 
@@ -54,8 +55,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
                 if (textName.getText().toString().isEmpty())
                     textName.setError("Enter this filed");
-                else if (textPhone.getText().toString().isEmpty())
-                    textPhone.setError("Enter this filed");
+                else if (textPhone.getText().toString().isEmpty() || textPhone.getText().toString().length() != 10 )
+                    textPhone.setError("Enter a 10 digit mobile number ");
                 else if (textColg.getText().toString().isEmpty())
                     textColg.setError("Enter this filed");
                 else if (textUserName.getText().toString().isEmpty())
@@ -77,11 +78,20 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                         }
                     }
                     else {
-                        long no =  dbHelper.insertUser(textName.getText().toString().trim(),textPhone.getText().toString().trim(),textColg.getText().toString().trim(),
-                                textUserName.getText().toString().trim(),TextPass.getText().toString().trim(), spUserType.getSelectedItem().toString().trim());
-                        Toast.makeText(this, "User added", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(Register.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                        finish();
+
+                        if (!dbHelper.isUserAvailable(textUserName.getText().toString().trim())){
+
+                            long no =  dbHelper.insertUser(textName.getText().toString().trim(),textPhone.getText().toString().trim(),textColg.getText().toString().trim(),
+                                    textUserName.getText().toString().trim(),TextPass.getText().toString().trim(), spUserType.getSelectedItem().toString().trim());
+                            Toast.makeText(this, "User added", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(Register.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            finish();
+                        }
+                        else {
+                            textUserName.setError("User name exists");
+                            Toast.makeText(this, "User name already available, try different user name", Toast.LENGTH_SHORT).show();
+
+                        }
 
                     }
 

@@ -63,6 +63,7 @@ public class AddEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        getSupportActionBar().setTitle("Create New Event");
         sessionManager = new SessionManager(getApplicationContext());
         imagePost = findViewById(R.id.imagePost);
         etTitle = findViewById(R.id.etTitle);

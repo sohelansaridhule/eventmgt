@@ -67,7 +67,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="User type"
-                    android:layout_margin="@dimen/_8sdp"/>
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    />
 
                 <Spinner
                     android:id="@+id/spUserType"
@@ -182,7 +184,7 @@
                             android:drawableLeft="@drawable/ic_person_black_24dp"
                             android:layout_width="match_parent"
                             android:textSize="18dp"
-                            android:inputType="number"
+                            android:inputType="phone"
                             android:maxLength="10"
                             android:layout_marginLeft="15dp"
 
@@ -257,7 +259,7 @@
                             android:layout_width="match_parent"
                             android:textSize="18dp"
                             android:layout_marginLeft="15dp"
-
+                            android:inputType="textPassword"
                             android:layout_height="wrap_content" />
 
                     </android.support.design.widget.TextInputLayout>

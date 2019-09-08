@@ -22,10 +22,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -46,6 +48,7 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
     private EditText edtTitle, edtDate, edtCaption;
     private ImageView image, ivDelete;
     Button btnUpdate;
+    ImageButton imageEdit;
 
     private File photoFile;
     private String imageFilePath = "";
@@ -86,13 +89,19 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
         ivDelete = findViewById(R.id.ivDelete);
         ivDelete.setOnClickListener(this);
 
+        imageEdit = findViewById(R.id.imageEdit);
+        imageEdit.setOnClickListener(this);
+
         btnUpdate = findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(this);
 
         if (sessionManager.getUserType().equalsIgnoreCase(DBHelper.STUDENT))
             btnUpdate.setText("Participate");
 
-        image.setImageURI(Uri.parse(imagePath));
+        if (imagePath != null && !imagePath.equalsIgnoreCase(""))
+            image.setImageURI(Uri.parse(imagePath));
+        else
+            image.setImageDrawable(getResources().getDrawable(R.drawable.blank));
         edtTitle.setText(title);
         edtDate.setText(date);
         edtCaption.setText(caption);
@@ -157,8 +166,14 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        if (sessionManager.getUserType().equalsIgnoreCase(DBHelper.STUDENT))
+        if (sessionManager.getUserType().equalsIgnoreCase(DBHelper.STUDENT)){
             ivDelete.setVisibility(View.GONE);
+            edtDate.setEnabled(false);
+            edtTitle.setEnabled(false);
+            edtCaption.setEnabled(false);
+            imageEdit.setEnabled(false);
+
+        }
 
     }
 
@@ -192,9 +207,20 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
                 if (sessionManager.getUserType().equalsIgnoreCase(DBHelper.STUDENT)){
                     DBHelper dbHelper = new DBHelper(getApplicationContext());
                     if (!sessionManager.getUserName().equals("") && eventId != 0){
-                        if (dbHelper.insertParticipte(sessionManager.getUserName(),String.valueOf(eventId), title, sessionManager.getUserColg()) > 0){
-                            Toast.makeText(EventDetails.this, "Participated", Toast.LENGTH_SHORT).show();
+
+                        if (!dbHelper.checkStudParticAvailable(sessionManager.getUserName(),String.valueOf(eventId))){
+                            if (dbHelper.insertParticipte(sessionManager.getUserName(),String.valueOf(eventId), title, sessionManager.getUserColg()) > 0){
+                                Toast.makeText(EventDetails.this, "Participated", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
+                        else {
+                            Toast.makeText(EventDetails.this, "Already Participated", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                     else {
                         Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
@@ -207,11 +233,22 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.image:
+                View vv = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_image, null);
+                ImageView iv = vv.findViewById(R.id.imageZ);
+                new AlertDialog.Builder(EventDetails.this)
+                        .setView(vv).create().show();
+
+                iv.setImageURI(Uri.parse(imagePath));
+
+
+                break;
+            case R.id.imageEdit:
                 if (hasCameraAndStoragePermission())
                     actionDialogBox();
                 else
                     requestForCameraAndStorage();
                 break;
+
         }
     }
 

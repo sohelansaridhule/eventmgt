@@ -106,6 +106,27 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean isUserAvailable(String uName){
+        String where = COL_USER_ID+" = '"+uName+"'";
+        String query = "SELECT * FROM "+TABLE_USER+" WHERE "+where;
+
+        SQLiteDatabase db  = getReadableDatabase();
+        Cursor cursor      = db.rawQuery(query, null);
+        boolean b = false;
+        if (cursor.getCount() > 0){
+            b= true;
+        }
+        else {
+            b= false;
+        }
+
+        cursor.close();
+        db.close();
+        return  b;
+
+
+    }
+
 
     public long insertUser(String name,String mobile,String colg,String uname,String pass, String userType)
     {
@@ -163,6 +184,24 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean checkStudParticAvailable(String userName, String eventId){
+        String where = COL_PART_USER_NAME+" = '"+userName+"' AND "+COL_PART_EVENT_ID+" = '"+eventId+"'";
+        String query = "SELECT * FROM "+TABLE_PARTICIPATES+" WHERE "+where;
+
+        SQLiteDatabase db  = getReadableDatabase();
+        Cursor cursor      = db.rawQuery(query, null);
+        boolean b = false;
+        if (cursor.getCount() > 0)
+            b = true;
+        else
+            b =  false;
+        cursor.close();
+        db.close();
+
+        return b;
+
+    }
+
     public long insertParticipte(String userName, String eventId, String eventName, String colgName){
         long returnVal = 0;
         try {
@@ -215,7 +254,8 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<Event>  eventArrayList = new ArrayList<>();
 
         String where = COL_EVE_COLG +" = '"+cName+"'";
-        String selectQuery = "SELECT  * FROM " + TABLE_EVENT+" WHERE "+where;
+//        String selectQuery = "SELECT  * FROM " + TABLE_EVENT+" WHERE "+where;
+        String selectQuery = "SELECT  * FROM " + TABLE_EVENT;
         SQLiteDatabase db  = getReadableDatabase();
         Cursor cursor      = db.rawQuery(selectQuery, null);
 

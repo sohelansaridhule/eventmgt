@@ -21,10 +21,51 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/lin1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_below="@id/appbar"
+        android:background="@color/Light_Grey"
+        android:elevation="@dimen/_4sdp"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/tvUName"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:gravity="center"
+            android:textSize="@dimen/_14sdp"
+            android:text="Student Name"/>
+        <TextView
+            android:id="@+id/tvEName"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14sdp"
+            android:gravity="center"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:text="Event Title"/>
+        <TextView
+            android:id="@+id/tvCName"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="@dimen/_14sdp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="College Name"/>
+    </LinearLayout>
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appbar"/>
+        android:layout_below="@id/lin1"/>
 
 </RelativeLayout>
