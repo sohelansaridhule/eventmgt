@@ -108,6 +108,29 @@
                     android:text=""/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="College"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:gravity="start"/>
+
+                <EditText
+                    android:id="@+id/edtColg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:background="@drawable/border_rounded_corner_transparent"
+                    android:padding="@dimen/_10sdp"
+                    android:text=""/>
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

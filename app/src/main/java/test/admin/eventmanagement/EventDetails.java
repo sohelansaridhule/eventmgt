@@ -44,8 +44,8 @@ import test.admin.eventmanagement.util.SessionManager;
 public class EventDetails extends AppCompatActivity implements View.OnClickListener {
 
     private int eventId = 0;
-    private String title = "", caption = "", date = "", imagePath = "";
-    private EditText edtTitle, edtDate, edtCaption;
+    private String title = "", caption = "", date = "", imagePath = "", colgName = "";
+    private EditText edtTitle, edtDate, edtCaption , edtColg;
     private ImageView image, ivDelete;
     Button btnUpdate;
     ImageButton imageEdit;
@@ -80,8 +80,10 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
             date = bundle.getString("date");
             imagePath = bundle.getString("imagePath");
             eventId = bundle.getInt("eventId");
+            colgName = bundle.getString("colgName");
         }
         edtTitle = findViewById(R.id.edtTitle);
+        edtColg = findViewById(R.id.edtColg);
         edtDate = findViewById(R.id.edtDate);
         edtCaption = findViewById(R.id.edtCaption);
         image = findViewById(R.id.image);
@@ -103,6 +105,7 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
         else
             image.setImageDrawable(getResources().getDrawable(R.drawable.blank));
         edtTitle.setText(title);
+        edtColg.setText(colgName);
         edtDate.setText(date);
         edtCaption.setText(caption);
 
@@ -162,6 +165,7 @@ public class EventDetails extends AppCompatActivity implements View.OnClickListe
                 }, yr , dated.getMonth(), dated.getDay());
 
                 datePickerDialog.show();
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
             }
         });

@@ -44,6 +44,15 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:id="@+id/txtEventDate"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="#000"
+            android:layout_toRightOf="@+id/imgEvent"
+            android:text=""
+            android:layout_marginTop="@dimen/_5sdp"
+            android:id="@+id/txtColgName"/>
 
 
     </LinearLayout>

@@ -8,7 +8,15 @@ public class Event {
     private String EventImg;
     private String EventDetail;
     private String EventCaption;
+    private String ColgName;
 
+    public String getColgName() {
+        return ColgName;
+    }
+
+    public void setColgName(String colgName) {
+        ColgName = colgName;
+    }
 
     public int getId() {
         return id;

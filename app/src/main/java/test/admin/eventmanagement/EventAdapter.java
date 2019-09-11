@@ -43,6 +43,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.CustomViewHo
         final Event event  = eventList.get(i);
         holder.tv_title.setText(eventList.get(i).getEventName());
         holder.tv_date.setText(eventList.get(i).getEventDate());
+        holder.txtColgName.setText(eventList.get(i).getColgName());
         if (!event.getEventImg().equals(""))
             holder.imgPost.setImageURI(Uri.parse(event.getEventImg()));
         else
@@ -57,10 +58,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.CustomViewHo
                 intent.putExtra("caption",event.getEventCaption());
                 intent.putExtra("imagePath",event.getEventImg());
                 intent.putExtra("eventId",event.getId());
+                intent.putExtra("colgName", event.getColgName());
 
                 mContext.startActivity(intent);
             }
         });
+
 
     }
 
@@ -72,7 +75,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.CustomViewHo
     class CustomViewHolder extends RecyclerView.ViewHolder
     {
 
-        final TextView tv_title,tv_date;
+        final TextView tv_title,tv_date, txtColgName;
         final ImageView imgPost,imgDelete;
 
 
@@ -83,6 +86,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.CustomViewHo
             this.tv_title = view.findViewById(R.id.txtEventName);
             this.tv_date = view.findViewById(R.id.txtEventDate);
 
+            this.txtColgName = view.findViewById(R.id.txtColgName);
             this.imgPost = view.findViewById(R.id.imgEvent);
             this.imgDelete = view.findViewById(R.id.imageDelete);
         }

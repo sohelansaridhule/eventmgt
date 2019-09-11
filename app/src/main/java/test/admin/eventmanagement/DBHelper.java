@@ -268,6 +268,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 event.setEventDate(cursor.getString(2));
                 event.setEventCaption(cursor.getString(3));
                 event.setEventImg(cursor.getString(4));
+                event.setColgName(cursor.getString(5));
                 eventArrayList.add(event);
 
             } while (cursor.moveToNext());

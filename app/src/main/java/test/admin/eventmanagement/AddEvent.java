@@ -133,6 +133,7 @@ public class AddEvent extends AppCompatActivity {
                 }, yr , date.getMonth(), date.getDay());
 
                 datePickerDialog.show();
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() -1000);
             }
         });
 
